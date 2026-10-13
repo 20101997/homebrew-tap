@@ -12,15 +12,14 @@ cask "ditty" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :ventura"
+  depends_on macos: :ventura
 
   app "Ditty.app"
 
   # Ditty is not notarized, so macOS would refuse to open it. Installing from this tap clears the
   # download quarantine flag so it opens normally.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Ditty.app"]
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/Ditty.app"]
   end
 
   uninstall quit: "com.ahmedchemkhi.ditty"
